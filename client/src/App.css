@@ -26,8 +26,19 @@ body,
 html {
   font-size: 16px;
   position: relative;
+  background-color: #fff4e2;
 }
 
 button:hover {
   cursor: pointer;
+}
+
+#homepage-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
 }

@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Header.css";
 import SearchButton from "./search-button/SearchButton";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSearch,
@@ -9,20 +10,24 @@ import {
   faHeart,
   faBars,
 } from "@fortawesome/free-solid-svg-icons";
-import StickyHeader from "./StickyHeader";
-import { useNavigate } from "react-router-dom";
 
-function Header() {
-  const navigate = useNavigate();
-  const goLoginPage = () => {
-    navigate("/login", { state: { isSignIn: true } });
-  };
-  const goSignupPage = () => {
-    navigate("/login", { state: { isSignIn: false } });
-  };
+const StickyHeader = () => {
+  const [isSticky, setIsSticky] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop =
+        window.pageYOffset || document.documentElement.scrollTop;
+      setIsSticky(scrollTop > 200);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
-    <header>
-      <StickyHeader />
+    <header className={`sticky-header ${isSticky ? "sticky" : ""}`}>
       <div className="header-main">
         <button className="header-logo-button">
           <img
@@ -52,14 +57,14 @@ function Header() {
               <div className="speech-bubble-wrapper">
                 <div className="speech-bubble top">
                   <button
-                    onClick={goLoginPage}
+                    onClick={() => alert("Sign in")}
                     className="sign-in-button sign-buttons"
                   >
                     {" "}
                     Sign In
                   </button>
                   <button
-                    onClick={goSignupPage}
+                    onClick={() => alert("Sign Up")}
                     className="sign-up-button sign-buttons"
                   >
                     Sign Up
@@ -81,18 +86,8 @@ function Header() {
           </button>
         </div>
       </div>
-      <div className="header-nav">
-        <button className="category-nav">Women</button>
-        <button className="category-nav">Men</button>
-        <button className="category-nav">Children</button>
-        <button className="category-nav">Home&Furniture</button>
-        <button className="category-nav">Cosmetics</button>
-        <button className="category-nav">Shoes</button>
-        <button className="category-nav">Electronic</button>
-        <button className="category-nav">Spor&Outdoor</button>
-      </div>
     </header>
   );
-}
+};
 
-export default Header;
+export default StickyHeader;
