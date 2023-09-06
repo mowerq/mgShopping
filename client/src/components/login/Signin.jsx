@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./Signin.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useLocation, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 function Signin() {
   const location = useLocation();
@@ -26,6 +27,57 @@ function Signin() {
   const signUpPage = () => {
     setIsSignIn(false);
   };
+
+  const handleLogin = async (event) => {
+    event.preventDefault();
+    const email = document.getElementById("login-email").value;
+    const password = document.getElementById("login-password").value;
+
+    try {
+      const response = await fetch("http://localhost:5001/api/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: email, password: password }),
+      });
+      if (response.ok) {
+        const responseData = await response.json();
+        localStorage.setItem("accessToken", responseData.accessToken);
+        goHomepage();
+      } else {
+        Swal.fire("Try Again!", "Your email or password was wrong :(", "error");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const handleRegister = async (event) => {
+    event.preventDefault();
+    const email = document.getElementById("signup-email").value;
+    const password = document.getElementById("signup-password").value;
+    const name = document.getElementById("signup-name").value;
+
+    try {
+      const response = await fetch("http://localhost:5001/api/users/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name: name, email: email, password: password }),
+      });
+      if (response.ok) {
+        Swal.fire("Good job!", "You signed up successfully!", "success");
+        goHomepage();
+      } else {
+        console.log(response);
+        Swal.fire("Oh No!", `${response}`, "error");
+        throw new Error("Request failed");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <div id="login-signup-page">
       <img
@@ -36,7 +88,7 @@ function Signin() {
       />
       {isSignIn ? (
         <div id="login-page">
-          <div className="login-signup-form">
+          <form className="login-signup-form">
             <div className="login-signup-tabs">
               <div
                 onClick={signInPage}
@@ -61,6 +113,7 @@ function Signin() {
               <input
                 type="password"
                 name="password"
+                id="login-password"
                 className="login-signup-password"
                 required
               />
@@ -81,7 +134,9 @@ function Signin() {
               )}
             </div>
             <button id="forgot-password">Forgot your password?</button>
-            <button id="submit-login">Sign in</button>
+            <button onClick={handleLogin} id="submit-login">
+              Sign in
+            </button>
             <div className="other-login-options">
               <div className="login-with-other-options">
                 <svg
@@ -120,11 +175,11 @@ function Signin() {
                 </div>
               </div>
             </div>
-          </div>
+          </form>
         </div>
       ) : (
         <div id="signup-page">
-          <div className="login-signup-form signup">
+          <form className="login-signup-form signup">
             <div className="login-signup-tabs">
               <div
                 onClick={signInPage}
@@ -142,15 +197,23 @@ function Signin() {
             <div className="field-holder">
               <h4 className="field-title">Your Name</h4>
               <input
+                id="signup-name"
                 placeholder="First and Last name"
+                autoComplete="off"
                 type="text"
-                name="text"
+                name="text-signup"
                 required
               />
             </div>
             <div className="field-holder">
               <h4 className="field-title">Email</h4>
-              <input type="text" name="email" id="signup-email" required />
+              <input
+                type="text"
+                name="email-signup"
+                id="signup-email"
+                required
+                autoComplete="off"
+              />
               <label htmlFor="signup-email">example@domain.com</label>
             </div>
             <div className="field-holder">
@@ -158,7 +221,8 @@ function Signin() {
               <input
                 className="login-signup-password"
                 type="password"
-                name="password"
+                name="password-signup"
+                id="signup-password"
                 required
               />
               {seePassword ? (
@@ -177,8 +241,10 @@ function Signin() {
                 />
               )}
             </div>
-            <button id="submit-signup">Sign up</button>
-          </div>
+            <button onClick={handleRegister} id="submit-signup">
+              Sign up
+            </button>
+          </form>
         </div>
       )}
     </div>

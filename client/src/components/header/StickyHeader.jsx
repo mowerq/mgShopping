@@ -9,11 +9,19 @@ import {
   faUser,
   faHeart,
   faBars,
+  faBagShopping,
+  faComments,
+  faArrowRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 
-const StickyHeader = () => {
+const StickyHeader = ({ isUser, userData }) => {
   const [isSticky, setIsSticky] = useState(false);
 
+  const handleLogOut = () => {
+    localStorage.setItem("accessToken", "");
+    window.location.reload();
+  };
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop =
@@ -25,12 +33,26 @@ const StickyHeader = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+  const navigate = useNavigate();
+  const goLoginPage = () => {
+    navigate("/login", { state: { isSignIn: true } });
+  };
+  const goSignupPage = () => {
+    navigate("/login", { state: { isSignIn: false } });
+  };
+  const goHomepage = () => {
+    navigate("/");
+  };
+  const goCartPage = () => {
+    navigate("/cart");
+  };
 
   return (
     <header className={`sticky-header ${isSticky ? "sticky" : ""}`}>
       <div className="header-main">
         <button className="header-logo-button">
           <img
+            onClick={goHomepage}
             className="header-horizontal-logo"
             src="../img/logo_17_horizontal.png"
             alt="logo"
@@ -50,34 +72,83 @@ const StickyHeader = () => {
         </div>
         <div className="header-user-buttons">
           <SearchButton />
-          <button className="header-login header-user-button">
+          <div className="header-login header-user-button">
             <FontAwesomeIcon icon={faUser} title="Login" />
             <span className="header-button-text">
-              Sign In{" "}
+              {isUser ? "Profile" : "Sign in"}
               <div className="speech-bubble-wrapper">
-                <div className="speech-bubble top">
-                  <button
-                    onClick={() => alert("Sign in")}
-                    className="sign-in-button sign-buttons"
-                  >
-                    {" "}
-                    Sign In
-                  </button>
-                  <button
-                    onClick={() => alert("Sign Up")}
-                    className="sign-up-button sign-buttons"
-                  >
-                    Sign Up
-                  </button>
-                </div>
+                {isUser ? (
+                  <div className="speech-bubble top header-profile">
+                    <span className="header-profile-name">{`${userData.name}`}</span>
+                    <div className="header-profile-buttons">
+                      <div className="header-profile-button">
+                        <FontAwesomeIcon
+                          className="header-profile-button-icon"
+                          icon={faBagShopping}
+                        />
+                        <span className="header-profile-button-content">
+                          My Orders
+                        </span>
+                      </div>
+                      <div className="header-profile-button">
+                        <FontAwesomeIcon
+                          className="header-profile-button-icon"
+                          icon={faComments}
+                        />
+                        <span className="header-profile-button-content">
+                          My Reviews
+                        </span>
+                      </div>
+                      <div className="header-profile-button">
+                        <FontAwesomeIcon
+                          className="header-profile-button-icon"
+                          icon={faUser}
+                        />
+                        <span className="header-profile-button-content">
+                          My Information
+                        </span>
+                      </div>
+                      <div
+                        onClick={handleLogOut}
+                        className="header-profile-button"
+                      >
+                        <FontAwesomeIcon
+                          className="header-profile-button-icon"
+                          icon={faArrowRightFromBracket}
+                        />
+                        <span className="header-profile-button-content">
+                          Log out
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="speech-bubble top">
+                    <button
+                      onClick={goLoginPage}
+                      className="sign-in-button sign-buttons"
+                    >
+                      Sign In
+                    </button>
+                    <button
+                      onClick={goSignupPage}
+                      className="sign-up-button sign-buttons"
+                    >
+                      Sign Up
+                    </button>
+                  </div>
+                )}
               </div>
             </span>
-          </button>
+          </div>
           <button className="header-favorites header-user-button">
             <FontAwesomeIcon icon={faHeart} title="Favorites" />
             <span className="header-button-text">Favorites</span>
           </button>
-          <button className="header-cart header-user-button">
+          <button
+            onClick={goCartPage}
+            className="header-cart header-user-button"
+          >
             <FontAwesomeIcon icon={faShoppingCart} title="Cart" />
             <span className="header-button-text">Cart</span>
           </button>

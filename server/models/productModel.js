@@ -11,6 +11,10 @@ const productSchema = mongoose.Schema(
       type: String,
       required: [true, "Please add the product name!"],
     },
+    ownerName: {
+      type: String,
+      required: [true, "Please add the owner name!"],
+    },
     category: {
       type: String,
       required: [true, "Please add the product category!"],
@@ -18,6 +22,45 @@ const productSchema = mongoose.Schema(
     price: {
       type: Number,
       required: [true, "Please add the product price!"],
+    },
+    features: {
+      type: [String],
+      default: [],
+    },
+    imgUrl: {
+      type: String,
+      required: [true, "Please enter an image url"],
+    },
+    reviews: {
+      type: [
+        {
+          reviewOwnerId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+          },
+          comment: {
+            type: String,
+            default: "",
+          },
+          numStars: {
+            type: Number,
+            required: [true, "Please select stars"],
+          },
+          reviewOwnerName: {
+            type: String,
+            default: "Unknown",
+          },
+          createdAt: {
+            type: Date,
+            default: Date.now(),
+          },
+        },
+      ],
+      default: [],
+    },
+    avgStars: {
+      type: Number,
+      default: 0,
     },
   },
   {

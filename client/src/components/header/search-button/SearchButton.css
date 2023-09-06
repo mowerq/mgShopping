@@ -39,3 +39,29 @@
   border-top-right-radius: 30px;
   border-bottom-right-radius: 30px;
 }
+
+@media (min-width: 1000px) {
+  .full-width-search-bar {
+    display: none;
+  }
+}
+
+@media (max-width: 740px) {
+  .full-width-search-bar {
+    align-items: center;
+    height: 70px;
+  }
+  #header-search-text-input-full-width {
+    font-size: 0.8rem;
+    height: 36px;
+    min-width: 0;
+  }
+  .cancel-search {
+    height: 40px;
+    width: 40px;
+  }
+  .search-button-full-width {
+    height: 40px;
+    width: 70px;
+  }
+}

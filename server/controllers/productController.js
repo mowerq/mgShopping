@@ -1,5 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const Product = require("../models/productModel");
+const { json } = require("express");
+const mongoose = require("mongoose");
 //const User = require()
 
 //@desc Get all products
@@ -18,25 +20,49 @@ const getAllProductsByOwnerId = asyncHandler(async (req, res) => {
   res.status(200).json(products);
 });
 
+//@desc Get all products by category
+//@route GET /api/products/categories/:category
+//@access public
+const getAllProductsByCategory = asyncHandler(async (req, res) => {
+  const products = await Product.find({ category: req.params.category });
+  res.status(200).json(products);
+});
+
 //@desc Get one product
 //@route GET /api/products/:id
 //@access public
 const getOneProduct = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params.id);
-  if (!product) {
+  if (mongoose.Types.ObjectId.isValid(req.params.id)) {
+    const product = await Product.findById(req.params.id);
+    console.log("PRODUCT: ", product);
+    if (!product) {
+      res.status(404);
+      throw new Error("Product not found!");
+    }
+    res.status(200).json(product);
+  } else {
     res.status(404);
     throw new Error("Product not found!");
   }
-  res.status(200).json(product);
 });
 
 //@desc Create a product
 //@route POST /api/products/
 //@access public
 const createProduct = asyncHandler(async (req, res) => {
-  console.log(req.body);
-  const { category, name, price, ownerId } = req.body;
-  if (!category || !name || !price || !ownerId) {
+  try {
+  } catch (error) {}
+  const { category, name, price, ownerId, ownerName, features, imgUrl } =
+    req.body;
+  if (
+    !category ||
+    !name ||
+    !price ||
+    !ownerId ||
+    !features ||
+    !imgUrl ||
+    !ownerName
+  ) {
     res.status(400);
     throw new Error("All fields are mandatory!");
   }
@@ -46,11 +72,14 @@ const createProduct = asyncHandler(async (req, res) => {
       name,
       price,
       ownerId,
+      ownerName,
+      features,
+      imgUrl,
     });
     res.status(201).json(product);
   } catch (err) {
     res.status(400);
-    throw new Error(`Validation Error: ${error.message}`);
+    throw new Error(`Validation Error: ${err.message}`);
   }
 });
 
@@ -91,4 +120,5 @@ module.exports = {
   updateProduct,
   deleteProduct,
   getAllProductsByOwnerId,
+  getAllProductsByCategory,
 };
