@@ -12,6 +12,16 @@ const getAllProducts = asyncHandler(async (req, res) => {
   res.status(200).json(products);
 });
 
+//@desc Search products by name
+//@route GET /api/products/search/:word
+//@access public
+const searchProducts = asyncHandler(async (req, res) => {
+  const { word } = req.params;
+  const regex = new RegExp(word, "i");
+  const products = await Product.find({ name: regex });
+  res.status(200).json(products);
+});
+
 //@desc Get all products by owner Id
 //@route GET /api/products/owner/:id
 //@access public
@@ -120,5 +130,6 @@ module.exports = {
   updateProduct,
   deleteProduct,
   getAllProductsByOwnerId,
+  searchProducts,
   getAllProductsByCategory,
 };

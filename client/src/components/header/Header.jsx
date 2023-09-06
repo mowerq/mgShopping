@@ -47,6 +47,9 @@ function Header({ userRetriever }) {
       setLoading(false);
     }
   };
+  const searchProduct = async () => {
+    navigate(`/search/${document.getElementById("search-text-input").value}`);
+  };
   useEffect(() => {
     getCurrentUser();
   }, []);
@@ -88,11 +91,12 @@ function Header({ userRetriever }) {
         <div className="search-bar">
           <input
             className="search-text-input"
+            id="search-text-input"
             type="text"
             placeholder="Search a product"
             maxLength={50}
           />
-          <button className="search-button">
+          <button onClick={searchProduct} className="search-button">
             <FontAwesomeIcon color="white" icon={faSearch} />
           </button>
         </div>

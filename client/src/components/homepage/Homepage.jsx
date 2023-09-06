@@ -67,6 +67,12 @@ function Homepage() {
       imgurl:
         "https://cdn.outsideonline.com/wp-content/uploads/2022/01/GettyImages-1191744336.jpg",
     },
+    {
+      title: "Pet Shop",
+      url: "/categories/petshop",
+      imgurl:
+        "https://www.bestbullysticks.com/cdn/shop/articles/happy-woman-and-her-dog_1400x.jpg?v=1638214764",
+    },
   ];
   const handleLeftArrow = () => {
     if (imageIndex == 0) {

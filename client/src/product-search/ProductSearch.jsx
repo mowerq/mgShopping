@@ -1,30 +1,20 @@
-import React, { useState } from "react";
-import "./CategorySearch.css";
+import React, { useEffect, useState } from "react";
+import "./ProductSearch.css";
 import { useNavigate, useParams } from "react-router-dom";
-import Header from "../header/Header";
-import Footer from "../footer/Footer";
-import axios from "axios";
-import { useEffect } from "react";
-import SidebarMenu from "../sidebar-menu/SidebarMenu";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as fasStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as farStar } from "@fortawesome/free-regular-svg-icons";
+import axios from "axios";
 import { TailSpin } from "react-loader-spinner";
+import Header from "../components/header/Header";
+import SidebarMenu from "../components/sidebar-menu/SidebarMenu";
+import Footer from "../components/footer/Footer";
 
-function CategorySearch() {
-  const { category } = useParams();
-  const navigate = useNavigate();
-  const [products, setProducts] = useState([]);
-  const [starFilter, setStarFilter] = useState(0);
-  const [priceFilter, setPriceFilter] = useState([0, Number.MAX_VALUE]);
+function ProductSearch() {
+  const { word } = useParams();
+  const [products, setProducts] = useState({});
   const [loading, setLoading] = useState(true);
-  const [userLoaded, setUserLoaded] = useState(false);
-  const [user, setUser] = useState({});
-
-  const retrieveUser = (loggedInUser) => {
-    setUser(loggedInUser);
-    setUserLoaded(true);
-  };
+  const navigate = useNavigate();
   const takeStarFilter = (starData) => {
     setStarFilter(starData);
     console.log(starFilter);
@@ -34,53 +24,20 @@ function CategorySearch() {
     console.log(priceFilter);
   };
   useEffect(() => {
-    const getProductsByCategory = async () => {
+    const getProducts = async () => {
       try {
-        let response;
-        console.log(category);
-        if (category === "allproducts") {
-          response = await axios.get(`http://localhost:5001/api/products/`);
-        } else if (category === "favorites") {
-          if (userLoaded) {
-            const productsArray = [];
-            for (let i = 0; i < user.favorites.length; i++) {
-              response = await axios.get(
-                `http://localhost:5001/api/products/${user.favorites[i]}`
-              );
-              productsArray.push(response.data);
-            }
-            const filtered = productsArray.filter(
-              (p) =>
-                p.avgStars >= starFilter &&
-                p.price >= priceFilter[0] &&
-                p.price <= priceFilter[1]
-            );
-            setProducts(filtered);
-            setLoading(false);
-            return;
-          } else {
-            return;
-          }
-        } else {
-          response = await axios.get(
-            `http://localhost:5001/api/products/categories/${category}`
-          );
-        }
-
-        const filtered = response.data.filter(
-          (p) =>
-            p.avgStars >= starFilter &&
-            p.price >= priceFilter[0] &&
-            p.price <= priceFilter[1]
+        const response = await axios.get(
+          `http://localhost:5001/api/products/search/${word}`
         );
-        setProducts(filtered);
+        console.log(response.data);
+        setProducts(response.data);
         setLoading(false);
       } catch (error) {
-        console.error(error);
+        console.log(error);
       }
     };
-    getProductsByCategory();
-  }, [category, starFilter, priceFilter, user]);
+    getProducts();
+  }, []);
 
   const showAvgStars = (avgStars, numReviews) => {
     if (avgStars > 0) {
@@ -101,10 +58,9 @@ function CategorySearch() {
       return stars;
     }
   };
-
   return (
     <div className="category-search-container">
-      <Header userRetriever={retrieveUser} />
+      <Header />
       <div id="category-search-page-content">
         <SidebarMenu starData={takeStarFilter} priceData={takePriceFilter} />
         {loading ? (
@@ -161,4 +117,4 @@ function CategorySearch() {
   );
 }
 
-export default CategorySearch;
+export default ProductSearch;

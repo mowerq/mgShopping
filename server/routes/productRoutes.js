@@ -8,9 +8,11 @@ const {
   deleteProduct,
   getAllProductsByOwnerId,
   getAllProductsByCategory,
+  searchProducts,
 } = require("../controllers/productController");
 
 router.route("/").get(getAllProducts).post(createProduct);
+router.route("/search/:word").get(searchProducts);
 router.route("/categories/:category").get(getAllProductsByCategory);
 router.route("/owner/:id").get(getAllProductsByOwnerId);
 router

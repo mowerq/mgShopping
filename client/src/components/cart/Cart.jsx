@@ -83,7 +83,7 @@ function Cart() {
       ) : (
         <div className="cart-page-content">
           <div className="buy-cart">
-            <h4 className="sub-total-price">{`Sub total: ${subTotal.toLocaleString()}`}</h4>
+            <h4 className="sub-total-price">{`Sub total: ${subTotal.toLocaleString()} TL`}</h4>
             <button className="proceed-checkout">Proceed to checkout</button>
           </div>
           <div className="cart-container">

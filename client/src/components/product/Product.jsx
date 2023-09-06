@@ -67,7 +67,7 @@ function Product() {
       }
     };
     getProductByProductId();
-  }, [productid, user]);
+  }, [productid, user, isFav]);
 
   const handleFav = async () => {
     if (accessToken !== "") {
@@ -87,10 +87,22 @@ function Product() {
             },
           }
         );
+        Swal.fire({
+          toast: true,
+          position: "top-right",
+          iconColor: "green",
+          customClass: {
+            popup: "colored-toast",
+          },
+          showConfirmButton: false,
+          timer: 1500,
+          timerProgressBar: true,
+          icon: "success",
+          title: "Success",
+        });
         setIsFav(!isFav);
-      } catch (error) {
-        console.error(error);
-      }
+        user.favorites = favs;
+      } catch (error) {}
     } else {
       /*if (!localStorage.getItem("isShowed")) {
         Swal.fire(
@@ -145,6 +157,12 @@ function Product() {
         );
         console.log(response);
         setController(!controller);
+        Swal.fire({
+          toast: true,
+          icon: "success",
+          title: "Success!",
+          text: "Your toast message here",
+        });
       } catch (error) {
         console.error(error);
       }
@@ -157,7 +175,7 @@ function Product() {
       const stars = [];
       stars.push(
         <span className="product-page-avg-stars">{`${avgStars.toFixed(
-          2
+          1
         )}`}</span>
       );
       for (let i = 0; i < solidAvgStars; i++) {

@@ -106,16 +106,7 @@ header.sticky > .header-main {
 .header-cart-div {
   position: relative;
 }
-#num-products-in-cart {
-  position: absolute;
-  right: 43%;
-  top: -18%;
-  font-size: 0.82rem;
-  font-weight: 600;
-  padding: 4px 9.5px;
-  border-radius: 50%;
-  background-color: #ffda959d;
-}
+
 .star-rating {
   white-space: nowrap;
 }
@@ -151,7 +142,17 @@ header.sticky > .header-main {
   position: absolute;
   left: 16%;
   top: -16%;
-  font-size: 0.82rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  padding: 4px 9.5px;
+  border-radius: 50%;
+  background-color: #ffda959d;
+}
+#num-products-in-cart {
+  position: absolute;
+  right: 43%;
+  top: -18%;
+  font-size: 0.84rem;
   font-weight: 600;
   padding: 4px 9.5px;
   border-radius: 50%;

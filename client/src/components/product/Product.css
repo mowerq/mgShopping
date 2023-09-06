@@ -4,6 +4,7 @@
   align-items: center;
   padding: 60px;
   background-color: white;
+  min-height: 80vh;
 }
 .product-page-image-and-details {
   display: flex;
@@ -125,7 +126,9 @@
     filter: blur(0);
   }
 }
-
+.colored-toast.swal2-icon-success {
+  background-color: #a5dc86 !important;
+}
 #product-reviews {
   position: relative;
   padding-top: 120px;
