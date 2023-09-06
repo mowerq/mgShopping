@@ -62,11 +62,12 @@ const StickyHeader = ({ isUser, userData }) => {
         <div className="search-bar">
           <input
             className="search-text-input"
+            id="search-text-input"
             type="text"
             placeholder="Search a product"
             maxLength={50}
           />
-          <button className="search-button">
+          <button onClick={searchProduct} className="search-button">
             <FontAwesomeIcon color="white" icon={faSearch} />
           </button>
         </div>
@@ -141,17 +142,40 @@ const StickyHeader = ({ isUser, userData }) => {
               </div>
             </span>
           </div>
-          <button className="header-favorites header-user-button">
-            <FontAwesomeIcon icon={faHeart} title="Favorites" />
-            <span className="header-button-text">Favorites</span>
-          </button>
-          <button
-            onClick={goCartPage}
-            className="header-cart header-user-button"
-          >
-            <FontAwesomeIcon icon={faShoppingCart} title="Cart" />
-            <span className="header-button-text">Cart</span>
-          </button>
+          <div className="header-cart-div">
+            {isUser ? (
+              <span id="num-products-in-favorites">{`${userData.favorites.length}`}</span>
+            ) : null}
+
+            <button
+              onClick={isUser ? goFavorites : goLoginPage}
+              className="header-cart header-user-button"
+            >
+              <FontAwesomeIcon
+                className="header-button-icon"
+                icon={faHeart}
+                title="Favorites"
+              />
+              <span className="header-button-text">Favorites</span>
+            </button>
+          </div>
+          <div className="header-cart-div">
+            {isUser ? (
+              <span id="num-products-in-cart">{`${userData.cart.products.length}`}</span>
+            ) : null}
+            <button
+              onClick={isUser ? goCartPage : goLoginPage}
+              className="header-cart header-user-button"
+            >
+              <FontAwesomeIcon
+                className="header-button-icon"
+                icon={faShoppingCart}
+                title="Cart"
+              />
+              <span className="header-button-text">Cart</span>
+            </button>
+          </div>
+
           <button className="sidebar-menu header-user-button">
             <FontAwesomeIcon icon={faBars} />
           </button>
