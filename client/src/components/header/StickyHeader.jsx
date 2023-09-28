@@ -22,6 +22,9 @@ const StickyHeader = ({ isUser, userData }) => {
     localStorage.setItem("accessToken", "");
     window.location.reload();
   };
+  const searchProduct = async () => {
+    navigate(`/search/${document.getElementById("search-text-input").value}`);
+  };
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop =
@@ -45,6 +48,9 @@ const StickyHeader = ({ isUser, userData }) => {
   };
   const goCartPage = () => {
     navigate("/cart");
+  };
+  const goFavorites = () => {
+    navigate("/categories/favorites");
   };
 
   return (
